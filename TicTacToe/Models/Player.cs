@@ -19,6 +19,8 @@ namespace TicTacToe.Models
         public int leftDiag { get; set; }
         public int rightDiag { get; set; }
 
+        private int inValidCount { get; set; }
+
         public Player(int id, string name, PlayerType playerType, string symbol, int dimension)
         {
             Id = id;
@@ -33,14 +35,24 @@ namespace TicTacToe.Models
 
         public virtual Move DecideMove(Board board)
         {
+            if(inValidCount==3)
+            {
+                Console.WriteLine("You have entered more tha nallowed invalid moves");
+                return null;
+            }
             Console.WriteLine("Enter the row num");
             int row= Convert.ToInt32(Console.ReadLine());
             Console.WriteLine("Enter the col num");
             int col = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine("Enter the symbol to be added");
-            string symbol = Console.ReadLine().ToString();
             var cell = board.board[row][col];
+            if (cell.cellState==CellState.FILLED)
+            {
+                inValidCount++;
+                Console.WriteLine("Invalid move");
+                return DecideMove(board);
+            }
             cell.cellState = CellState.FILLED;
+            cell.player = this;
             
             return new Move(cell, this);
 

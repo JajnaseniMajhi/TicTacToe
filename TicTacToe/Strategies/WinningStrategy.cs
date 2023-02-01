@@ -15,12 +15,12 @@ namespace TicTacToe.Strategies
             var player = move.Player;
             //Update player count
             player.rowCount[move.Cell.row] += 1;
-            if(player.rowCount.Length==dimension)
+            if (player.rowCount[move.Cell.row] ==dimension)
             {
                 return true;
             }
             player.colCount[move.Cell.col] += 1;
-            if (player.colCount.Length == dimension)
+            if (player.colCount[move.Cell.col] == dimension)
             {
                 return true;
             }

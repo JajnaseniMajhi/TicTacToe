@@ -20,10 +20,6 @@ namespace TicTacToe.Models
             this.col = col;
             this.cellState = CellState.EMPTY;
         }
-
-        //public Player GetPlayer()
-        //{
-        //    return player;
-        //}
+       
     }
 }

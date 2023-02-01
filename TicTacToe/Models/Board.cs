@@ -29,17 +29,18 @@ namespace TicTacToe.Models
         {
             for(int i=0;i<board.Count;i++)
             {
-                for(int j=0;j<board.Count;i++)
+                for(int j=0;j<board.Count;j++)
                 {
                     if (board[i][j].cellState==CellState.EMPTY)
                     {
-                        Console.WriteLine("|  " + "|");
+                        Console.Write("|  " + "|");
                     }
                     else
                     {
-                        Console.WriteLine("| " + board[i][j].player.Symbol + "|");
+                        Console.Write("| " + board[i][j].player.Symbol + "|");
                     }
                 }
+                Console.WriteLine();
             }
         }
     }

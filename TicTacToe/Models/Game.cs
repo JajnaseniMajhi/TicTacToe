@@ -17,46 +17,69 @@ namespace TicTacToe.Models
         private IWinningStrategy _winningStrategy;
         private int playerIndex;
 
+        public GameStatus GameStatus { get; set; }
+
         private Game()
         {
-
+            this.GameStatus = GameStatus.INPROGRESS;
         }
 
         public static Builder GetBuilder()
         {
             return new Builder();
         }
-        public bool UnDo()
+        public void UnDo()
         {
-            return true;
+            int count = Moves.Count;
+            if(count > 0)
+            {
+                    Move lastMove= Moves[count-1];
+                
+                    Moves.Remove(lastMove);
+                    //Update the board
+                    Cell cell = lastMove.Cell;
+                    board.board[cell.row][cell.col].cellState = CellState.EMPTY;
+                    board.board[cell.row][cell.col].player = null;
+            }
+            else
+            {
+                Console.WriteLine("No Earlier moves for Undo");
+            }
+            
         }
 
-        public void PlayNextMove(Player player)
+        public void DisplayBoard()
         {
+            board.DisplayBoard();
+        }
+
+        public void PlayNextMove()
+        {
+            Player player = PlayersList[playerIndex];
+            
             if(Moves.Count==board.board.Count* board.board.Count)
             {
                 Console.WriteLine("All Cells are filled");
                 Console.WriteLine("Match is draw.");
-                //return false;
+                this.GameStatus = GameStatus.ENDED;
             }
             //Decide the move
+            Console.WriteLine("Player {0} is playing", player.Name);
             var move=  player.DecideMove(board);
-            //Add move to moveList
-            Moves.Add(move);
-            //Check Winner
-            if(_winningStrategy.IsWinner(move,board))
+            if (move != null)
             {
-                Console.WriteLine("Winner is : " + move.Player.Name);
-               // return false;
+                //Add move to moveList
+                Moves.Add(move);
+                //Check Winner
+                if (_winningStrategy.IsWinner(move, board))
+                {
+                    DisplayBoard();
+                    Console.WriteLine("Winner is : " + move.Player.Name);
+                    this.GameStatus = GameStatus.ENDED;
+                }
             }
             playerIndex++;
-            if(playerIndex==PlayersList.Count-1)
-            {
-                playerIndex = 0;
-            }
-            PlayNextMove(PlayersList[playerIndex]);
-            
-            //return false;
+            playerIndex %= PlayersList.Count;
         }
 
         public bool CheckWinner(Board board,Move move)
