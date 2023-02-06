@@ -16,6 +16,7 @@ namespace TicTacToe.Models
 
         private IWinningStrategy _winningStrategy;
         private int playerIndex;
+        private int currPlayerIndex;
 
         public GameStatus GameStatus { get; set; }
 
@@ -33,13 +34,28 @@ namespace TicTacToe.Models
             int count = Moves.Count;
             if(count > 0)
             {
-                    Move lastMove= Moves[count-1];
-                
+                Console.WriteLine("Player index" + currPlayerIndex);
+
+                    Move lastMove = Moves[count-1];
                     Moves.Remove(lastMove);
                     //Update the board
                     Cell cell = lastMove.Cell;
                     board.board[cell.row][cell.col].cellState = CellState.EMPTY;
                     board.board[cell.row][cell.col].player = null;
+                    lastMove.Player.rowCount[cell.row] -= 1;
+                    lastMove.Player.colCount[cell.col] -= 1;
+                    if(cell.row==cell.col)
+                    {
+                        lastMove.Player.leftDiag -= 1;
+                    }
+                    if(cell.row+cell.col==board.board.Count-1)
+                    {
+                    lastMove.Player.rightDiag -= 1;
+                    }
+
+
+                    playerIndex =currPlayerIndex;
+                    playerIndex %= PlayersList.Count;
             }
             else
             {
@@ -51,6 +67,11 @@ namespace TicTacToe.Models
         public void DisplayBoard()
         {
             board.DisplayBoard();
+        }
+
+        public void MoveToNextPlayer()
+        {
+
         }
 
         public void PlayNextMove()
@@ -66,6 +87,7 @@ namespace TicTacToe.Models
             //Decide the move
             Console.WriteLine("Player {0} is playing", player.Name);
             var move=  player.DecideMove(board);
+            
             if (move != null)
             {
                 //Add move to moveList
@@ -78,6 +100,7 @@ namespace TicTacToe.Models
                     this.GameStatus = GameStatus.ENDED;
                 }
             }
+            currPlayerIndex = playerIndex;
             playerIndex++;
             playerIndex %= PlayersList.Count;
         }

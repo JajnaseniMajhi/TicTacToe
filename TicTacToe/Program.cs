@@ -48,18 +48,15 @@ while (game.GameStatus == GameStatus.INPROGRESS)
     Console.WriteLine("Display the current board");
     gameController.DisplayBoard(game);
 
-    //Console.WriteLine("Do you want to do UNDO? Y/N");
-    //string isUndo = Console.ReadLine();
-    //if(isUndo=="Y")
-    //{
-    //    gameController.Undo(game);
-        //gameController.DisplayBoard(game);
-    //}
-    //else
-    //{
-       gameController.NextPlayerMove(game);
-
-    //}
+    Console.WriteLine("Do you want to do UNDO? Y/N");
+    string isUndo = Console.ReadLine();
+    if (isUndo == "Y")
+    {
+        gameController.Undo(game);
+        Console.WriteLine("Undo the last step successfully);");
+        gameController.DisplayBoard(game);
+    }
+    gameController.NextPlayerMove(game);
 
 }
 
